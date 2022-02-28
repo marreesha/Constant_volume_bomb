@@ -1,0 +1,120 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+scale 0.075;
+
+H -0.224;
+algle45 0.70710678;
+algle_45 -0.70710678;
+
+vertices
+(
+//Plane A:
+( 0.45 				-0.45 			$H) // Vertex A0 = 0
+( 0.45 				 0.45 			$H) // Vertex A1 = 1
+(-0.45 				 0.45 			$H) // Vertex A2 = 2
+(-0.45 				-0.45 			$H) // Vertex A3 = 3
+
+($algle45 		 	$algle_45 		$H) // Vertex A4 = 4
+($algle45 		 	$algle45 		$H) // Vertex A5 = 5
+($algle_45 	     	$algle45 		$H) // Vertex A6 = 6
+($algle_45 		 	$algle_45 		$H) // Vertex A7 = 7
+
+
+//Plane B:
+( 0.45 				-0.45 			0) // Vertex B0 = 8
+( 0.45 				 0.45 			0) // Vertex B1 = 9
+(-0.45 				 0.45 			0) // Vertex B2 = 10
+(-0.45 				-0.45 			0) // Vertex B3 = 11
+
+($algle45 			$algle_45 		0) // Vertex B4 = 12
+($algle45 		 	$algle45 		0) // Vertex B5 = 13
+($algle_45 		 	$algle45 		0) // Vertex B6 = 14
+($algle_45 			$algle_45 		0) // Vertex B7 = 15
+);
+
+
+// Defining blocks:
+blocks
+(
+//Blocks between plane A and plane B:
+// block0 - positive x O-grid block
+hex (5 1 0 4 13 9 8 12 ) AB (40 45 22) simpleGrading (10 1 1)
+
+// block1 - positive y O-grid block
+hex (6 2 1 5 14 10 9 13 ) AB (40 45 22) simpleGrading (10 1 1)
+
+// block2 - negative x O-grid block
+hex (7 3 2 6 15 11 10 14 ) AB (40 45 22) simpleGrading (10 1 1)
+
+// block3 - negative y O-grid block
+hex (4 0 3 7 12 8 11 15 ) AB (40 45 22) simpleGrading (10 1 1)
+
+// block4 - central O-grid block
+hex (0 1 2 3 8 9 10 11 ) AB	(45 45 22) simpleGrading (1 1 1)
+);
+
+
+edges
+(
+//Plane A:
+arc 0 1 (0.55 0 $H)
+arc 1 2 (0 0.55 $H)
+arc 2 3 (-0.55 0 $H)
+arc 3 0 (0 -0.55 $H)
+arc 4 5 (1 0 $H)
+arc 5 6 (0 1 $H)
+arc 6 7 (-1 0 $H)
+arc 7 4 (0 -1 $H)
+
+//Plane B:
+arc 8 9 (0.55 0 0)
+arc 9 10 (0 0.55 0)
+arc 10 11 (-0.55 0 0)
+arc 11 8 (0 -0.55 0)
+arc 12 13 (1 0 0)
+arc 13 14 (0 1 0)
+arc 14 15 (-1 0 0)
+arc 15 12 (0 -1 0)
+);
+
+
+// Defining patches:
+patches
+(
+patch inlet
+(
+(1 5 4 0)
+(2 6 5 1)
+(3 7 6 2)
+(0 4 7 3)
+(3 2 1 0)
+)
+patch outlet
+(
+(13 9 8 12)
+(14 10 9 13)
+(15 11 10 14)
+(12 8 11 15)
+(8 9 10 11)
+)
+wall wallDiffuser
+(
+(4 5 13 12)
+(5 6 14 13)
+(6 7 15 14)
+(7 4 12 15)
+)
+);
