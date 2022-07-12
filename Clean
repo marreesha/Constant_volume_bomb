@@ -1,0 +1,16 @@
+#!/bin/sh
+
+foamListTimes -rm
+rm -r processor0
+rm -r processor1
+
+rm log.*
+
+rm result*.png
+
+rm -r postProcessing
+
+rm -r dynamicCode
+
+rm -r constant/polyMesh
+

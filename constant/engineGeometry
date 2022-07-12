@@ -1,0 +1,30 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "constant";
+    object          engineGeometry;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+swirlAxis       ( 0 0 1 );
+
+swirlCenter     ( 0 0 0 );
+
+swirlRPMRatio   swirlRPMRatio [ 0 0 0 0 0 0 0 ] 1.5;
+
+swirlProfile    swirlProfile [ 0 0 0 0 0 0 0 ] 3.11;
+
+bore            bore [ 0 1 0 0 0 0 0 ] 0.15;
+
+rpm             rpm [ 0 0 -1 0 0 0 0 ] 1000;
+
+
+// ************************************************************************* //

@@ -1,0 +1,103 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     reactingFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         0.01 ; // 0.01;
+
+deltaT          5e-6;
+
+writeControl    adjustableRunTime;
+
+writeInterval   50e-4;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  true;
+
+maxCo           0.8;
+
+functions
+{
+    #includeFunc probes
+    #includeFunc Qdot
+    #includeFunc fullEnthalphy
+    
+    integr
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+        writeFields     false;
+        operation       volIntegrate;
+        fields          (rho rhoh rhoCH4);
+    }
+
+    cylinder
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+        writeFields     false;
+        operation       volAverage;
+        fields
+        (
+            p T CH4 CO k
+        );
+    }
+    
+    spark
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    timeStep;
+        log             true;
+        writeFields     false;
+        regionType      cellZone;
+        name            ignition;
+        operation       volAverage;
+        fields
+        (
+            T
+            CH4
+        );
+    }
+}
+
+
+// ************************************************************************* //

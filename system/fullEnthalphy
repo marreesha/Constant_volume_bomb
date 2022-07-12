@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+Description
+    https://www.cfd-online.com/Forums/openfoam-programming-development/227500-integrate-multiplication-fields.html
+
+\*---------------------------------------------------------------------------*/
+
+    functionObjectLibs ("libutilityFunctionObjects.so");
+    type            coded;
+    name            fullEnthalphy;
+    writeControl    timeStep;
+    // writeControl    adjustableRunTime;
+    // writeInterval   0.01;
+    codeWrite
+    #{
+
+        // Info << "Writing fullEnthalphy field" << endl;
+
+        if (!mesh().foundObject<volScalarField>("rhoh")) 
+        {
+            static autoPtr<volScalarField> rhoh;
+            rhoh.set
+            (
+                new volScalarField
+                (
+                    IOobject
+                    (   
+                        "rhoh",
+                        mesh().time().timeName(),
+                        mesh(),
+                        IOobject::NO_READ,
+                        IOobject::AUTO_WRITE
+                    ),
+                    mesh(), 
+                    dimEnergy/dimVolume
+                )
+            );
+        }
+        
+        if (!mesh().foundObject<volScalarField>("rhoCH4")) 
+        {
+            static autoPtr<volScalarField> rhoCH4;
+            rhoCH4.set
+            (
+                new volScalarField
+                (
+                    IOobject
+                    (   
+                        "rhoCH4",
+                        mesh().time().timeName(),
+                        mesh(),
+                        IOobject::NO_READ,
+                        IOobject::AUTO_WRITE
+                    ),
+                    mesh(), 
+                    dimMass/dimVolume
+                )
+            );
+        }
+        
+        
+        
+
+        if(mesh().time().timeIndex() != 1)
+        {
+           volScalarField& rhoh = 
+                mesh().lookupObjectRef<volScalarField>("rhoh");
+            rhoh = 
+                mesh().lookupObject<volScalarField>("T") * 
+                mesh().lookupObject<volScalarField>("Cv") * 
+                mesh().lookupObject<volScalarField>("rho");
+                
+                
+            volScalarField& rhoCH4 = 
+                mesh().lookupObjectRef<volScalarField>("rhoCH4");
+            rhoCH4 = 
+                mesh().lookupObject<volScalarField>("CH4") * 
+                mesh().lookupObject<volScalarField>("rho");
+                
+
+            if (mesh().time().outputTime())
+            {
+                rhoh.write();
+                rhoCH4.write();
+            }
+        }
+    #};
+
+// ************************************************************************* //

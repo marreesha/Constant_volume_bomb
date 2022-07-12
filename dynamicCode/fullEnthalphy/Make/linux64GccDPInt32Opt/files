@@ -1,0 +1,6 @@
+# dynamicCode:
+# SHA1 = 1c4c2018ebb173e14188cb809e1a55a3b009ee26
+
+SOURCE += codedFunctionObjectTemplate.C
+
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libfullEnthalphy_1c4c2018ebb173e14188cb809e1a55a3b009ee26

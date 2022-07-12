@@ -1,0 +1,18 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+cp 0/U.orig 0/U
+runApplication blockMesh
+runApplication engineSwirl
+runApplication topoSet
+runApplication setsToZones
+#runApplication setFields
+runApplication decomposePar -force
+runParallel -a $(getApplication)
+#runApplication reconstructPar
+
+#rm -r processor0
+#rm -r processor1
+
+#------------------------------------------------------------------------------
